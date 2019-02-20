@@ -46,6 +46,10 @@ public class Provider {
         service.setInterface(ServiceApi.class);
         service.setRef(serviceApi);
         service.setVersion("1.0.0");
+        //负载均衡策略
+        service.setLoadbalance("random");
+        //重试
+        service.setRetries(2);
 
         // 暴露及注册服务
         service.export();

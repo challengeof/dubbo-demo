@@ -12,12 +12,12 @@ import java.util.Date;
 public class ServiceApiImpl implements ServiceApi {
 
     @Override
-    public void findF(String name) {
+    public String findF(String name) {
         System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] Hello " + name + ", request from consumer: " + RpcContext.getContext().getRemoteAddress());
-        for (;;) {
-
-        }
-        //return "Hello " + name + ", response form provider: " + RpcContext.getContext().getLocalAddress();
+        //for (;;) {
+        //
+        //}
+        return "Hello " + name + ", response form provider: " + RpcContext.getContext().getLocalAddress();
 
     }
 }

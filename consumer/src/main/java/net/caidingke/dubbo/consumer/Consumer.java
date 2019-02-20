@@ -3,6 +3,7 @@ package net.caidingke.dubbo.consumer;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
+import com.alibaba.dubbo.config.utils.ReferenceConfigCache;
 import com.google.common.collect.ImmutableList;
 import net.caidingke.dubbo.service.ServiceApi;
 
@@ -37,14 +38,19 @@ public class Consumer {
         reference.setInterface(ServiceApi.class);
         reference.setVersion("1.0.0");
 
+        //缓存
+        ReferenceConfigCache cache = ReferenceConfigCache.getCache();
+        ServiceApi cacheApi = cache.get(reference);
+
+
         // 和本地bean一样使用xxxService
         ServiceApi serviceApi = reference.get();
 
         while (true) {
             try {
                 Thread.sleep(1);
-                serviceApi.findF("bowen"); // call remote method
-                //System.out.println(f); // get result
+                String f = serviceApi.findF("bowen"); // call remote method
+                System.out.println(f); // get result
 
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
