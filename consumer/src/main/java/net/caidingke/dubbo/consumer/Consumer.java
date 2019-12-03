@@ -1,11 +1,11 @@
 package net.caidingke.dubbo.consumer;
 
-import com.alibaba.dubbo.config.ApplicationConfig;
-import com.alibaba.dubbo.config.ReferenceConfig;
-import com.alibaba.dubbo.config.RegistryConfig;
-import com.alibaba.dubbo.config.utils.ReferenceConfigCache;
 import com.google.common.collect.ImmutableList;
 import net.caidingke.dubbo.service.ServiceApi;
+import org.apache.dubbo.config.ApplicationConfig;
+import org.apache.dubbo.config.ConfigCenterConfig;
+import org.apache.dubbo.config.ReferenceConfig;
+import org.apache.dubbo.config.RegistryConfig;
 
 /**
  * 消费者
@@ -22,11 +22,14 @@ public class Consumer {
 
         RegistryConfig registry = new RegistryConfig();
         registry.setAddress("zookeeper://localhost:2181");
+
+        ConfigCenterConfig configCenterConfig = new ConfigCenterConfig();
+        configCenterConfig.setAddress("zookeeper://localhost:2181");
         //registry.setUsername("aaa");
         //registry.setPassword("bbb");
 
-        RegistryConfig registry1 = new RegistryConfig();
-        registry1.setAddress("zookeeper://localhost:2182");
+        // RegistryConfig registry1 = new RegistryConfig();
+        // registry1.setAddress("zookeeper://localhost:2182");
 
         // 注意：ReferenceConfig为重对象，内部封装了与注册中心的连接，以及与服务提供方的连接
 
@@ -34,13 +37,15 @@ public class Consumer {
         ReferenceConfig<ServiceApi> reference = new ReferenceConfig<ServiceApi>();
         reference.setApplication(application);
         //reference.setRegistry(registry);
-        reference.setRegistries(ImmutableList.of(registry,registry1));
+        reference.setRegistries(ImmutableList.of(registry));
         reference.setInterface(ServiceApi.class);
         reference.setVersion("1.0.0");
+        reference.setConfigCenter(configCenterConfig);
 
         //缓存
-        ReferenceConfigCache cache = ReferenceConfigCache.getCache();
-        ServiceApi cacheApi = cache.get(reference);
+        // ServiceApi cacheApi=  reference.get();
+        // ReferenceConfigCache cache = ReferenceConfigCache.getCache();
+        // ServiceApi cacheApi = cache.get(reference);
 
 
         // 和本地bean一样使用xxxService

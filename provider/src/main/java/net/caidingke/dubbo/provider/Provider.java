@@ -1,11 +1,8 @@
 package net.caidingke.dubbo.provider;
 
-import com.alibaba.dubbo.config.ApplicationConfig;
-import com.alibaba.dubbo.config.ProtocolConfig;
-import com.alibaba.dubbo.config.RegistryConfig;
-import com.alibaba.dubbo.config.ServiceConfig;
 import net.caidingke.dubbo.provider.service.ServiceApiImpl;
 import net.caidingke.dubbo.service.ServiceApi;
+import org.apache.dubbo.config.*;
 
 /**
  * 提供服务
@@ -33,8 +30,11 @@ public class Provider {
         // 服务提供者协议配置
         ProtocolConfig protocol = new ProtocolConfig();
         protocol.setName("dubbo");
-        protocol.setPort(20880);
+        protocol.setPort(20881);
         protocol.setThreads(200);
+
+        ConfigCenterConfig configCenterConfig = new ConfigCenterConfig();
+        configCenterConfig.setAddress("zookeeper://localhost:2181");
 
         // 注意：ServiceConfig为重对象，内部封装了与注册中心的连接，以及开启服务端口
 
@@ -45,6 +45,7 @@ public class Provider {
         service.setProtocol(protocol); // 多个协议可以用setProtocols()
         service.setInterface(ServiceApi.class);
         service.setRef(serviceApi);
+        service.setConfigCenter(configCenterConfig);
         service.setVersion("1.0.0");
         //负载均衡策略
         service.setLoadbalance("random");
